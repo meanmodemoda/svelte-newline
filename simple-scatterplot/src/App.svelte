@@ -6,6 +6,7 @@
 
   import { scaleLinear } from "d3-scale";
   import { max } from "d3-array";
+  import {fly} from "svelte/transition";
 
   let width = 400;
   $: console.log(width)
@@ -24,8 +25,10 @@
   let hoveredData;
 $: console.log(hoveredData)
  
- 
+
+
 </script>
+<h1>Students who studied longer scored higher on final exams</h1>
 <div class="chart-container" bind:clientWidth={width}>
 
 <svg {width} {height}
@@ -36,6 +39,7 @@ on:mouseleave={() =>hoveredData=null}>
     <!-- sorting data for tab -->
     {#each data.sort((a,b)=>a.grade-b.grade) as d}
       <circle
+      in:fly={{x:-20, opacity:0, duration: 300}}
         cx={xScale(d.grade)}
         cy={yScale(d.hours)}
         r={hoveredData === d ? 20:10}
@@ -45,9 +49,7 @@ on:mouseleave={() =>hoveredData=null}>
         stroke-width={1}
         on:mouseover={() =>hoveredData=d}
         on:focus={() =>hoveredData=d}
-     tabindex="0"
-
-      
+     tabindex="0"  
       />
     {/each}
   </g>
@@ -65,5 +67,10 @@ on:mouseleave={() =>hoveredData=null}>
   }
   circle {
     transition: r 300ms, opacity 500ms ease;
+  }
+  h1 {
+    font-size: 1.35rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
   }
 </style>
